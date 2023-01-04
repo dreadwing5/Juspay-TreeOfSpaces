@@ -1,0 +1,27 @@
+[  {"tree": ["World", "Asia", "China", "India", "SouthAfrica", "Egypt"],
+    "no_of_children": 2,
+    "queries": [
+      {"qn": 1, "name": "China", "uuid": 1},
+      {"qn": 1, "name": "India", "uuid": 1},
+      {"qn": 1, "name": "China", "uuid": 2}
+    ]
+  },
+  {
+    "tree": ["World", "Asia", "Europe"],
+    "no_of_children": 3,
+    "queries": [
+      {"qn": 2, "name": "World", "uuid": 2},
+      {"qn": 3, "name": "Asia", "uuid": 3},
+      {"qn": 1, "name": "Europe", "uuid": 1}
+    ]
+  },
+  {
+    "tree": ["World", "Asia", "China", "India", "SouthAfrica", "Egypt"],
+    "no_of_children": 2,
+    "queries": [
+      {"qn": 1, "name": "China", "uuid": 1},
+      {"qn": 1, "name": "India", "uuid": 1},
+      {"qn": 1, "name": "China", "uuid": 2}
+    ]
+  }
+]
