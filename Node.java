@@ -6,6 +6,7 @@ public class Node {
     Node parent;
     boolean isLocked;
     int uuid;
+    boolean resourceInUse = false;
 
     Node(String val) {
         this.val = val;
@@ -15,45 +16,49 @@ public class Node {
         parent = null;
     }
 
-    public boolean lock(Node node, int uuid) {
+    public boolean lock(Node node, int uuid) throws InterruptedException {
         Stack<Node> ancestors = new Stack<>();
-        // try {
-        // NodeLock.getInstance().acquire(this);
-        if (node.isLocked == true || locked_nodes.size() >= 1) {
-            return false;
-        }
-        Node curr = node.parent;
-        while (curr != null) {
-            // NodeLock.getInstance().acquire(curr);
-            ancestors.push(curr);
-            if (curr.isLocked == true) {
-                return false;
+        try {
+            NodeLock.getInstance().acquire(node);
+            synchronized (node) {
+                if (node.isLocked == true || locked_nodes.size() >= 1) {
+                    return false;
+                }
             }
-            curr = curr.parent;
+            Node curr = node.parent;
+            while (curr != null) {
+                synchronized (curr) {
+                    NodeLock.getInstance().acquire(curr);
+                    ancestors.push(curr);
+                    if (curr.isLocked == true) {
+                        return false;
+                    }
+                    curr = curr.parent;
+
+                }
+
+            }
+
+            // lock the node
+            node.isLocked = true;
+            node.uuid = uuid;
+
+            curr = node.parent;
+            while (curr != null) {
+                Thread.sleep(1000); // force context switch
+                synchronized (curr) {
+                    curr.locked_nodes.add(node);
+                    curr = curr.parent;
+                }
+            }
+            return true;
+        } finally {
+            while (!ancestors.isEmpty()) {
+                Node curr = ancestors.pop();
+                NodeLock.getInstance().release(curr);
+            }
+            NodeLock.getInstance().release(this);
         }
-
-        // lock the node
-        node.isLocked = true;
-        node.uuid = uuid;
-
-        curr = node.parent;
-        while (curr != null) {
-            curr.locked_nodes.add(node);
-            curr = curr.parent;
-        }
-
-        return true;
-
-        // } catch (InterruptedException e) {
-        // System.out.println("Interrupted");
-        // return false;
-        // }
-        // } finally {
-        // while (!ancestors.isEmpty()) {
-        // NodeLock.getInstance().release(ancestors.pop());
-        // }
-        // NodeLock.getInstance().release(this);
-        // }
 
     }
 
@@ -74,7 +79,7 @@ public class Node {
         return true;
     }
 
-    public boolean upgrade(Node node, int uuid) {
+    public boolean upgrade(Node node, int uuid) throws InterruptedException {
         if (node.isLocked == true || locked_nodes.size() == 0) {
             return false;
         }

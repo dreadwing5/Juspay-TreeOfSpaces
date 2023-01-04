@@ -15,7 +15,7 @@ public class ThreadTest extends Thread {
     public void run() {
 
         try {
-            Thread.sleep(rand.nextInt(1000));
+            // Thread.sleep(rand.nextInt(1000));
             if (node.lock(node, uuid)) {
                 System.out.println("Thread " + Thread.currentThread().getId() + " successfully acquired lock on node "
                         + node.val);
@@ -35,8 +35,8 @@ public class ThreadTest extends Thread {
         String[] nodes = { "World", "Asia", "China", "India", "SouthAfrica", "Egypt" };
         int no_of_children = 2;
         Node root = treeOfSpaces.buildTree(nodes, no_of_children);
-        ThreadTest t1 = new ThreadTest(TreeOfSpaces.map.get("Asia"), 1);
-        ThreadTest t2 = new ThreadTest(TreeOfSpaces.map.get("China"), 2);
+        ThreadTest t1 = new ThreadTest(TreeOfSpaces.map.get("India"), 1);
+        ThreadTest t2 = new ThreadTest(TreeOfSpaces.map.get("Asia"), 2);
         t1.start();
         t2.start();
 
