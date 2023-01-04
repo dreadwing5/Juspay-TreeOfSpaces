@@ -27,15 +27,12 @@ public class Node {
             }
             Node curr = node.parent;
             while (curr != null) {
-                synchronized (curr) {
-                    NodeLock.getInstance().acquire(curr);
-                    ancestors.push(curr);
-                    if (curr.isLocked == true) {
-                        return false;
-                    }
-                    curr = curr.parent;
-
+                NodeLock.getInstance().acquire(curr);
+                ancestors.push(curr);
+                if (curr.isLocked == true) {
+                    return false;
                 }
+                curr = curr.parent;
 
             }
 
