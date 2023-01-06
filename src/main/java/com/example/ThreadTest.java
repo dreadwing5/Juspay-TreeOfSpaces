@@ -1,3 +1,5 @@
+package com.example;
+
 import java.util.Random;
 
 public class ThreadTest extends Thread {

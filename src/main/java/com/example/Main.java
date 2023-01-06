@@ -1,3 +1,5 @@
+package com.example;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -15,13 +17,14 @@ public class Main {
 
     public static class Query {
         public int qn; // query number
+
         public String name;
         public int uuid;
     }
 
     public static void main(String[] args) throws Exception {
-        List<TestCase> testCases = readInput("input.txt");
-        BufferedWriter bw = new BufferedWriter(new FileWriter("output.txt"));
+        List<TestCase> testCases = new Main().readInput("input.txt");
+        BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/resources/output.txt"));
         TreeOfSpaces treeOfSpaces = new TreeOfSpaces();
         for (TestCase testCase : testCases) {
             String[] nodes = testCase.tree;
@@ -47,11 +50,12 @@ public class Main {
 
     }
 
-    private static List<TestCase> readInput(String inputFile) throws Exception {
+    private List<TestCase> readInput(String inputFile) throws Exception {
 
         List<TestCase> testCases = new ArrayList<>();
 
-        FileReader fr = new FileReader(inputFile);
+        String filePath = getClass().getClassLoader().getResource(inputFile).getPath();
+        FileReader fr = new FileReader(filePath);
         BufferedReader br = new BufferedReader(fr);
 
         int numTestCases = Integer.parseInt(br.readLine());
