@@ -22,11 +22,13 @@ public class Node {
         Stack<Node> ancestors = new Stack<>();
         try {
             NodeLock.getInstance().acquire(node);
+            System.out.println("Thread " + Thread.currentThread().getId() + " acquired lock on node " + node.val);
             synchronized (node) {
                 if (node.isLocked == true || locked_nodes.size() >= 1) {
                     return false;
                 }
             }
+
             Node curr = node.parent;
             while (curr != null) {
                 NodeLock.getInstance().acquire(curr);
